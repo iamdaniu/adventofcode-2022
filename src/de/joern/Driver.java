@@ -9,12 +9,13 @@ import java.util.List;
 public class Driver {
 
     public static void main(String[] args) {
+        System.out.printf("solving %d problems%n", Problems.values().length);
         for (Problems p : Problems.values()) {
             execute(p);
         }
     }
 
-    public static void execute(Problems problem) {
+    private static void execute(Problems problem) {
         try {
             List<ProblemSolver> solvers = problem.getSolvers();
             var input = getFile(problem);
@@ -27,7 +28,7 @@ public class Driver {
         }
     }
 
-    public static Path getFile(Problems problem) {
+    private static Path getFile(Problems problem) {
         String filename = String.format("day%d.txt", problem.getDay());
         return Paths.get("data", filename);
     }
