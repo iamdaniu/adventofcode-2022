@@ -21,7 +21,7 @@ public class Driver {
             var input = getFile(problem);
             for (ProblemSolver solver : solvers) {
                 Files.lines(input).forEach(solver::consider);
-                solver.finished();
+                System.out.println(solver.finished());
             }
         } catch (IOException e) {
             e.printStackTrace();
