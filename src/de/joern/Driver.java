@@ -16,6 +16,7 @@ public class Driver {
     }
 
     private static void execute(Problems problem) {
+        System.out.printf("Day %d:%n", problem.day);
         try {
             List<ProblemSolver> solvers = problem.getSolvers();
             var input = getFile(problem);
