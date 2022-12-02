@@ -15,7 +15,7 @@ public class TestUtil {
             var values = fromFile(day);
             values.forEach(solver::consider);
             long result = solver.finished();
-            assertEquals(result, expected);
+            assertEquals(expected, result);
         } catch (IOException x) {
             fail(x.getMessage());
         }
