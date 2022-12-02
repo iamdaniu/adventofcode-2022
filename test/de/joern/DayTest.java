@@ -9,8 +9,14 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class TestUtil {
-    static void test(ProblemSolver solver, int day, long expected) {
+public class DayTest {
+    private final int day;
+
+    protected DayTest(int day) {
+        this.day = day;
+    }
+
+    protected final void test(ProblemSolver solver, long expected) {
         try {
             var values = fromFile(day);
             values.forEach(solver::consider);
