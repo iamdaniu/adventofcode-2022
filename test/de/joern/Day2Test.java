@@ -8,4 +8,9 @@ public class Day2Test {
     void day2_1() {
         TestUtil.test(Day2.day2_1(), 2, 15L);
     }
+
+    @Test
+    void day2_2() {
+        TestUtil.test(Day2.day2_2(), 2, 12L);
+    }
 }

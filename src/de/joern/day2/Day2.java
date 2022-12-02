@@ -3,33 +3,79 @@ package de.joern.day2;
 import de.joern.ProblemSolver;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static de.joern.day2.Day2.RPS.ROCK;
-import static de.joern.day2.Day2.RPS.SCISSORS;
+import static de.joern.day2.RPS.PAPER;
+import static de.joern.day2.RPS.ROCK;
+import static de.joern.day2.RPS.SCISSORS;
 
-public class Day2 implements ProblemSolver {
-    private final List<Move> moves = new ArrayList<>();
+public class Day2<T> implements ProblemSolver {
+    private final BiFunction<String, String, T> create;
+    private final Function<T, Long> evaluator;
+    private final List<T> moves = new ArrayList<>();
+
+    private Day2(BiFunction<String, String, T> create, Function<T, Long> evaluator) {
+        this.create = create;
+        this.evaluator = evaluator;
+    }
 
     public static ProblemSolver day2_1() {
-        return new Day2();
+        return new Day2<>((s0, s1) -> new Move(
+                RPS.from(s0),
+                RPS.from(s1)
+        ), Move::evaluate);
+    }
+
+    public static ProblemSolver day2_2() {
+        return new Day2<>((s0, s1) -> new DesiredMove(
+                RPS.from(s0),
+                Result.from(s1)),
+                DesiredMove::evaluate
+        );
     }
 
     public void consider(String line) {
         String[] currentMoves = line.split(" ");
-        Move currentMove = new Move(
-                RPS.from(currentMoves[0]),
-                RPS.from(currentMoves[1])
-        );
-        moves.add(currentMove);
+        moves.add(create.apply(currentMoves[0], currentMoves[1]));
     }
 
     public long finished() {
         return moves.stream()
-                .mapToLong(Move::evaluate)
+                .map(evaluator)
+                .mapToLong(Long::longValue)
                 .sum();
+    }
+
+    static record DesiredMove(RPS opponent, Result desiredResult) {
+        long evaluate() {
+            RPS myMove = switch (desiredResult) {
+                case DRAW:
+                    yield opponent;
+                case WIN:
+                    yield switch (opponent) {
+                        case ROCK:
+                            yield PAPER;
+                        case PAPER:
+                            yield SCISSORS;
+                        case SCISSORS:
+                            yield ROCK;
+                    };
+                default:
+                    yield switch (opponent) {
+                        case ROCK:
+                            yield SCISSORS;
+                        case PAPER:
+                            yield ROCK;
+                        case SCISSORS:
+                            yield PAPER;
+                    };
+            };
+            Move move = new Move(opponent, myMove);
+            return move.evaluate();
+        }
     }
 
     static record Move(RPS opponent, RPS self) {
@@ -53,26 +99,22 @@ public class Day2 implements ProblemSolver {
         }
     }
 
-    enum RPS {
-        ROCK(1, "A", "X"),
-        PAPER(2, "B", "Y"),
-        SCISSORS(3, "C", "Z");
+    enum Result {
+        WIN("Z"),
+        LOSE("X"),
+        DRAW("Y");
 
-        private final int value;
-        private final List<String> representations;
+        private final String parsed;
 
-        RPS(int value, String... representations) {
-            this.value = value;
-            this.representations = Arrays.asList(representations);
+        Result(String parsed) {
+            this.parsed = parsed;
         }
 
-        static RPS from(String parse) {
-            return Stream.of(RPS.values())
-                    .filter(rps -> rps.representations.contains(parse))
+        static Result from(String parse) {
+            return Stream.of(Result.values())
+                    .filter(r -> parse.equals(r.parsed))
                     .findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException("not a valid value: %s".formatted(parse)));
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid value %s".formatted(parse)));
         }
-
-
     }
 }

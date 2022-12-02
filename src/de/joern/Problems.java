@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public enum Problems {
         DAY1(1, de.joern.day1.Day1::day1_1, Day1::day1_2),
-        DAY2(2, Day2::day2_1)
+        DAY2(2, Day2::day2_1, Day2::day2_2)
     ;
 
     public final int day;
