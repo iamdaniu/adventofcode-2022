@@ -24,5 +24,18 @@ enum RPS {
                 .orElseThrow(() -> new IllegalArgumentException("not a valid value: %s".formatted(parse)));
     }
 
-
+    public RPS winsAgainst() {
+        return switch (this) {
+            case ROCK -> SCISSORS;
+            case PAPER -> ROCK;
+            case SCISSORS -> PAPER;
+        };
+    }
+    public RPS losesAgainst() {
+        return switch (this) {
+            case ROCK -> PAPER;
+            case PAPER -> SCISSORS;
+            case SCISSORS -> ROCK;
+        };
+    }
 }
