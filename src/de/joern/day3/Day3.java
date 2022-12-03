@@ -5,6 +5,9 @@ import de.joern.ProblemSolver;
 import java.util.*;
 import java.util.function.Function;
 
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toList;
+
 public class Day3 implements ProblemSolver {
     private final List<Rucksack> rucksacks = new ArrayList<>();
     private long singleScore;
@@ -34,24 +37,14 @@ public class Day3 implements ProblemSolver {
         return result;
     }
 
-    private long scoreGroup(List<Rucksack> partition) {
-        long result = 0;
-        Set<Character> commonElements = new HashSet<>(toSet(partition.get(0).items()));
-        commonElements.retainAll(toSet(partition.get(1).items()));
-        commonElements.retainAll(toSet(partition.get(2).items()));
-        for (Character c : commonElements) {
-            result += priority(c);
-        }
-        return result;
-    }
-
     @Override
     public void consider(String line) {
-        var rucksack = new Rucksack(line.toCharArray());
+        var rucksack = line.chars()
+                .mapToObj(i -> (char) i)
+                .collect(collectingAndThen(toList(), Rucksack::new));
         rucksacks.add(rucksack);
-        Set<Character> compartment1 = new HashSet<>(toSet(rucksack.getCompartment(0)));
-        var compartment2 = toSet(rucksack.getCompartment(1));
-        compartment1.retainAll(compartment2);
+        Set<Character> compartment1 = new HashSet<>(rucksack.getCompartment(0));
+        compartment1.retainAll(rucksack.getCompartment(1));
         for (char c : compartment1) {
             singleScore += priority(c);
         }
@@ -62,29 +55,29 @@ public class Day3 implements ProblemSolver {
         return score.apply(this);
     }
 
-    private static Set<Character> toSet(char[] compartment) {
-        Set<Character> result = new HashSet<>();
-        for (char c : compartment) {
-            result.add(c);
+    private static long scoreGroup(List<Rucksack> partition) {
+        long result = 0;
+        Set<Character> commonElements = new HashSet<>(partition.get(0).items());
+        commonElements.retainAll(partition.get(1).items());
+        commonElements.retainAll(partition.get(2).items());
+        for (Character c : commonElements) {
+            result += priority(c);
         }
         return result;
     }
 
     private static int priority(char c) {
-        int result;
-        if (Character.isLowerCase(c)) {
-            result = c - 'a' + 1;
-        } else {
-            result = c - 'A' + 27;
-        }
-        return result;
+        int correction = Character.isLowerCase(c)
+                ? 'a' - 1
+                : 'A' - 27;
+        return c - correction;
     }
 
-    static record Rucksack(char[] items) {
-        char[] getCompartment(int i) {
+    static record Rucksack(List<Character> items) {
+        List<Character> getCompartment(int i) {
             return (i == 0)
-                    ? Arrays.copyOf(items, items.length/2)
-                    : Arrays.copyOfRange(items, items.length/2, items.length);
+                    ? items.subList(0, items.size()/2)
+                    : items.subList(items.size()/2, items.size());
         }
     }
 }
