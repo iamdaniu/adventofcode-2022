@@ -12,4 +12,9 @@ public class Day4Test extends DayTest {
     void day4_1() {
         test(Day4.day4_1(), 2);
     }
+
+    @Test
+    void day4_2() {
+        test(Day4.day4_2(), 4);
+    }
 }
