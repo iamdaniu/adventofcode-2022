@@ -6,9 +6,18 @@ import java.util.*;
 
 public class Day6 implements ProblemSolver {
     List<Integer> startingPerLine = new ArrayList<>();
+    final int requiredLength;
+
+    public Day6(int requiredLength) {
+        this.requiredLength = requiredLength;
+    }
 
     public static ProblemSolver day6_1() {
-        return new Day6();
+        return new Day6(4);
+    }
+
+    public static ProblemSolver day6_2() {
+        return new Day6(14);
     }
 
     @Override
@@ -21,7 +30,7 @@ public class Day6 implements ProblemSolver {
             if (!allUnique(queue)) {
                 queue.remove();
             }
-            if (queue.size() == 4) {
+            if (queue.size() == requiredLength) {
                 startingPerLine.add(i+1);
                 break;
             }
