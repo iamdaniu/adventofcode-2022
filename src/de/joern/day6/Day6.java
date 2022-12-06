@@ -4,7 +4,7 @@ import de.joern.ProblemSolver;
 
 import java.util.*;
 
-public class Day6 implements ProblemSolver {
+public class Day6 implements ProblemSolver<List<Integer>> {
     List<Integer> startingPerLine = new ArrayList<>();
     final int requiredLength;
 
@@ -12,11 +12,11 @@ public class Day6 implements ProblemSolver {
         this.requiredLength = requiredLength;
     }
 
-    public static ProblemSolver day6_1() {
+    public static ProblemSolver<List<Integer>> day6_1() {
         return new Day6(4);
     }
 
-    public static ProblemSolver day6_2() {
+    public static ProblemSolver<List<Integer>> day6_2() {
         return new Day6(14);
     }
 
@@ -43,7 +43,7 @@ public class Day6 implements ProblemSolver {
     }
 
     @Override
-    public long finished() {
-        return startingPerLine.get(0);
+    public List<Integer> finished() {
+        return startingPerLine;
     }
 }

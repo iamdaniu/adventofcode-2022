@@ -8,7 +8,7 @@ import java.util.function.Function;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
-public class Day3 implements ProblemSolver {
+public class Day3 implements ProblemSolver<Long> {
     private final List<Rucksack> rucksacks = new ArrayList<>();
     private long singleScore;
     private final Function<Day3, Long> score;
@@ -17,10 +17,10 @@ public class Day3 implements ProblemSolver {
         score = scoreRetriever;
     }
 
-    public static ProblemSolver day3_1() {
+    public static ProblemSolver<Long> day3_1() {
         return new Day3(d -> d.singleScore);
     }
-    public static ProblemSolver day3_2() {
+    public static ProblemSolver<Long> day3_2() {
         return new Day3(Day3::groupedScore);
     }
 
@@ -51,7 +51,7 @@ public class Day3 implements ProblemSolver {
     }
 
     @Override
-    public long finished() {
+    public Long finished() {
         return score.apply(this);
     }
 

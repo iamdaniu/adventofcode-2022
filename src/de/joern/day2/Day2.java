@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public class Day2 implements ProblemSolver {
+public class Day2 implements ProblemSolver<Long> {
     private final BiFunction<String, String, Long> create;
     private final List<Long> moves = new ArrayList<>();
 
@@ -14,14 +14,14 @@ public class Day2 implements ProblemSolver {
         this.create = create;
     }
 
-    public static ProblemSolver day2_1() {
+    public static ProblemSolver<Long> day2_1() {
         return new Day2((s0, s1) -> play(
                 RPS.from(s0),
                 RPS.from(s1)
         ));
     }
 
-    public static ProblemSolver day2_2() {
+    public static ProblemSolver<Long> day2_2() {
         return new Day2((s0, s1) -> fromDesiredResult(
                 RPS.from(s0),
                 Result.from(s1))
@@ -33,7 +33,7 @@ public class Day2 implements ProblemSolver {
         moves.add(create.apply(currentMoves[0], currentMoves[1]));
     }
 
-    public long finished() {
+    public Long finished() {
         return moves.stream()
                 .mapToLong(Long::longValue)
                 .sum();

@@ -7,9 +7,8 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
-public class Day1 implements ProblemSolver {
+public class Day1 implements ProblemSolver<Long> {
     private Elf currentElf;
     private final List<Elf> elves = new ArrayList<>();
     private static final Comparator<Elf> BY_CALORIES = Comparator.comparing(Elf::totalCalories);
@@ -22,11 +21,11 @@ public class Day1 implements ProblemSolver {
         elves.add(currentElf);
     }
 
-    public static ProblemSolver day1_1() {
+    public static ProblemSolver<Long> day1_1() {
         return new Day1(Day1::day1_1_finish);
     }
 
-    public static ProblemSolver day1_2() {
+    public static ProblemSolver<Long> day1_2() {
         return new Day1(Day1::day1_2_finish);
     }
 
@@ -38,7 +37,7 @@ public class Day1 implements ProblemSolver {
         }
     }
 
-    public long finished() {
+    public Long finished() {
         finishElf();
         return collector.apply(elves);
     }
@@ -49,6 +48,7 @@ public class Day1 implements ProblemSolver {
                 .map(Elf::totalCalories)
                 .orElse(0L);
     }
+
     private static long day1_2_finish(Collection<Elf> elves) {
         return elves.stream()
                 .sorted(BY_CALORIES.reversed())
@@ -66,7 +66,7 @@ public class Day1 implements ProblemSolver {
         private final List<Integer> foodPackages = new ArrayList<>();
         private long totalCalories;
 
-        public void add(int calories) {
+        void add(int calories) {
             foodPackages.add(calories);
             totalCalories += calories;
         }

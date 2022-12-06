@@ -16,11 +16,11 @@ public class DayTest {
         this.day = day;
     }
 
-    protected final void test(ProblemSolver solver, long expected) {
+    protected final <T> void test(ProblemSolver<?> solver, T expected) {
         try {
             var values = fromFile(day);
             values.forEach(solver::consider);
-            long result = solver.finished();
+            Object result = solver.finished();
             assertEquals(expected, result);
         } catch (IOException x) {
             fail(x.getMessage());

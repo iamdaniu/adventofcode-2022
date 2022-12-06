@@ -9,7 +9,7 @@ import java.util.Stack;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
-public class Day5 implements ProblemSolver {
+public class Day5 implements ProblemSolver<String> {
     private final List<Stack<Character>> stacks = new ArrayList<>();
     private boolean stacksFinished;
     private final BiConsumer<Day5, Move> mover;
@@ -18,11 +18,11 @@ public class Day5 implements ProblemSolver {
         this.mover = mover;
     }
 
-    public static ProblemSolver day5_1() {
+    public static ProblemSolver<String> day5_1() {
         return new Day5(Day5::executeMove);
     }
 
-    public static ProblemSolver day5_2() {
+    public static ProblemSolver<String> day5_2() {
         return new Day5(Day5::move9001);
     }
 
@@ -101,13 +101,13 @@ public class Day5 implements ProblemSolver {
     }
 
     @Override
-    public long finished() {
+    public String finished() {
         StringBuilder topelements = new StringBuilder();
         for (Stack<Character> stack : stacks) {
             topelements.append(stack.pop());
         }
         System.out.println(topelements);
-        return topelements.toString().hashCode();
+        return topelements.toString();
     }
 
     static record Move(int moveCount, int fromCrate, int toCrate) {

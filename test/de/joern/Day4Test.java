@@ -10,11 +10,11 @@ public class Day4Test extends DayTest {
 
     @Test
     void day4_1() {
-        test(Day4.day4_1(), 2);
+        test(Day4.day4_1(), 2L);
     }
 
     @Test
     void day4_2() {
-        test(Day4.day4_2(), 4);
+        test(Day4.day4_2(), 4L);
     }
 }

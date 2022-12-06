@@ -10,11 +10,11 @@ public class Day5Test extends DayTest {
 
     @Test
     void day5_1() {
-        test(Day5.day5_1(), "CMZ".hashCode());
+        test(Day5.day5_1(), "CMZ");
     }
 
     @Test
     void day5_2() {
-        test(Day5.day5_2(), "MCD".hashCode());
+        test(Day5.day5_2(), "MCD");
     }
 }

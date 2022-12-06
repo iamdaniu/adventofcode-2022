@@ -7,16 +7,16 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
-public class Day4 implements ProblemSolver {
+public class Day4 implements ProblemSolver<Long> {
     private long fullOverlaps;
     private long totalOverlaps;
     private final Function<Day4, Long> score;
 
-    public static ProblemSolver day4_1() {
+    public static ProblemSolver<Long> day4_1() {
         return new Day4(d -> d.fullOverlaps);
     }
 
-    public static ProblemSolver day4_2() {
+    public static ProblemSolver<Long> day4_2() {
         return new Day4(d -> d.totalOverlaps);
     }
 
@@ -41,7 +41,7 @@ public class Day4 implements ProblemSolver {
     }
 
     @Override
-    public long finished() {
+    public Long finished() {
         return score.apply(this);
     }
 

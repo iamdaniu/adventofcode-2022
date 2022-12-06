@@ -1,7 +1,7 @@
 package de.joern;
 
-public interface ProblemSolver {
+public interface ProblemSolver<T> {
     void consider(String line);
 
-    long finished();
+    T finished();
 }
