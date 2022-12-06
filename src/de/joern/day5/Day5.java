@@ -106,7 +106,6 @@ public class Day5 implements ProblemSolver<String> {
         for (Stack<Character> stack : stacks) {
             topelements.append(stack.pop());
         }
-        System.out.println(topelements);
         return topelements.toString();
     }
 

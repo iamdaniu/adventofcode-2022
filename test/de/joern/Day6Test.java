@@ -12,10 +12,10 @@ public class Day6Test extends DayTest {
 
     @Test
     void day6_1() {
-        test(Day6.day6_1(), List.of(5));
+        test(Day6.day6_1(), List.of(7, 5, 6, 10, 11));
     }
     @Test
     void day6_2() {
-        test(Day6.day6_2(), List.of(23));
+        test(Day6.day6_2(), List.of(19, 23, 23, 29, 26));
     }
 }
