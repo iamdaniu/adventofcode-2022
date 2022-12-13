@@ -4,11 +4,17 @@ import de.joern.ProblemSolver;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.BiFunction;
 
 public class Day8 implements ProblemSolver<Integer> {
     private final Grid grid = new Grid();
 
     public static ProblemSolver<Integer> day8_1() {
+        return new Day8();
+    }
+
+    public static ProblemSolver<Integer> day8_2() {
         return new Day8();
     }
 
@@ -26,10 +32,7 @@ public class Day8 implements ProblemSolver<Integer> {
         int visibleCount = 0;
         for (int y = 0; y < grid.maxY(); y++) {
             for (int x = 0; x < grid.maxX(); x++) {
-                if (x == 0 || y == 0 || x == grid.maxX()-1 || y == grid.maxY()-1) {
-                    visibleCount++;
-                } else if (isVisible(x, y)) {
-                    System.out.printf("%d/%d is visible%n", y, x);
+                if (isVisible(x, y)) {
                     visibleCount++;
                 }
             }
@@ -37,50 +40,49 @@ public class Day8 implements ProblemSolver<Integer> {
         return visibleCount;
     }
 
+    List<Integer> heightsToLeft(int queryX, int queryY) {
+        List<Integer> result = new ArrayList<>();
+        for (int x = queryX-1; x >= 0; x--) {
+            result.add(grid.valueAt(x, queryY));
+        }
+        return result;
+    }
+    List<Integer> heightsToRight(int queryX, int queryY) {
+        List<Integer> result = new ArrayList<>();
+        for (int x = queryX+1; x < grid.maxX(); x++) {
+            result.add(grid.valueAt(x, queryY));
+        }
+        return result;
+    }
+    List<Integer> heightsToTop(int queryX, int queryY) {
+        List<Integer> result = new ArrayList<>();
+        for (int y = queryY-1; y >= 0; y--) {
+            result.add(grid.valueAt(queryX, y));
+        }
+        return result;
+    }
+    List<Integer> heightsToBottom(int queryX, int queryY) {
+        List<Integer> result = new ArrayList<>();
+        for (int y = queryY+1; y < grid.maxY(); y++) {
+            result.add(grid.valueAt(queryX, y));
+        }
+        return result;
+    }
+
     boolean isVisible(int queryX, int queryY) {
         int value = grid.valueAt(queryX, queryY);
         boolean visible = true;
-        // to left
-        for (int x = 0; x < queryX; x++) {
-            if (grid.valueAt(x, queryY) >= value) {
-                visible = false;
-                break;
+        List<BiFunction<Integer, Integer, List<Integer>>> sightsGenerators =
+                List.of(this::heightsToLeft, this::heightsToRight, this::heightsToTop, this::heightsToBottom);
+        for (BiFunction<Integer, Integer, List<Integer>> sightsGenerator : sightsGenerators) {
+            final var blocking = sightsGenerator.apply(queryX, queryY).stream()
+                    .filter(height -> height >= value)
+                    .findFirst();
+            if (blocking.isEmpty()) {
+                return true;
             }
         }
-        if (visible) {
-            return true;
-        }
-        // to right
-        visible = true;
-        for (int x = queryX+1; x < grid.maxX(); x++) {
-            if (grid.valueAt(x, queryY) >= value) {
-                visible = false;
-                break;
-            }
-        }
-        if (visible) {
-            return true;
-        }
-        // to top
-        visible = true;
-        for (int y = 0; y < queryY; y++) {
-            if (grid.valueAt(queryX, y) >= value) {
-                visible = false;
-                break;
-            }
-        }
-        if (visible) {
-            return true;
-        }
-        // to bottom
-        visible = true;
-        for (int y = queryY+1; y < grid.maxY(); y++) {
-            if (grid.valueAt(queryX, y) >= value) {
-                visible = false;
-                break;
-            }
-        }
-        return visible;
+        return false;
     }
 
     static class Grid {
