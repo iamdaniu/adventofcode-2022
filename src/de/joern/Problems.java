@@ -22,7 +22,7 @@ public enum Problems {
         DAY5(5, Day5::day5_1, Day5::day5_2),
         DAY6(6, Day6::day6_1, Day6::day6_2),
         DAY7(7, Day7::day7_1, Day7::day7_2),
-        DAY8(8, Day8::day8_1)
+        DAY8(8, Day8::day8_1, Day8::day8_2)
     ;
 
     public final int day;
