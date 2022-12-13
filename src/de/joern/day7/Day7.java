@@ -2,18 +2,26 @@ package de.joern.day7;
 
 import de.joern.ProblemSolver;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 public class Day7 implements ProblemSolver<Long> {
     private final FSDirectory root = FSDirectory.root();
     private FSDirectory pwd;
+    private final DirectoryVisitor resultCreator;
+
+    public Day7(DirectoryVisitor resultCreator) {
+        this.resultCreator = resultCreator;
+    }
 
     public static ProblemSolver<Long> day7_1() {
-        return new Day7();
+        return new Day7(new MaxSizeFinder());
+    }
+
+    public static ProblemSolver<Long> day7_2() {
+        return new Day7(new MinSufficientFinder());
     }
 
     @Override
@@ -47,18 +55,58 @@ public class Day7 implements ProblemSolver<Long> {
     @Override
     public Long finished() {
         Deque<FSDirectory> directories = new ArrayDeque<>();
-        List<FSDirectory> matching = new ArrayList<>();
         directories.add(root);
         while (!directories.isEmpty()) {
             var current = directories.pop();
-            var size = current.size();
-            if (size < 100_000) {
-                matching.add(current);
-            }
+            resultCreator.accept(current);
             directories.addAll(current.subdirectories());
         }
-        return matching.stream()
-                .mapToLong(FSEntry::size)
-                .sum();
+        return resultCreator.get();
+    }
+
+    interface DirectoryVisitor extends Consumer<FSDirectory>, Supplier<Long> { }
+
+    static class MaxSizeFinder implements DirectoryVisitor {
+        private final List<FSDirectory> matching = new ArrayList<>();
+
+        @Override
+        public void accept(FSDirectory directory) {
+            if (directory.size() < 100_000) {
+                matching.add(directory);
+            }
+        }
+
+        @Override
+        public Long get() {
+            return matching.stream()
+                    .mapToLong(FSEntry::size)
+                    .sum();
+        }
+    }
+
+    static class MinSufficientFinder implements DirectoryVisitor {
+        private FSDirectory toDelete;
+        private long removeTarget;
+
+        @Override
+        public void accept(FSDirectory directory) {
+            var directorySize = directory.size();
+            if (toDelete == null && directory.parent() == null) {
+                long currentFree = 70_000_000L - directorySize;
+                removeTarget = 30_000_000L - currentFree;
+                toDelete = directory;
+            } else if (directorySize > removeTarget) {
+                if (toDelete.size() > directorySize) {
+                    toDelete = directory;
+                }
+            }
+        }
+
+        @Override
+        public Long get() {
+            return Optional.ofNullable(toDelete)
+                    .map(FSEntry::size)
+                    .orElse(0L);
+        }
     }
 }

@@ -10,7 +10,12 @@ public class Day7Test extends DayTest {
 
 
     @Test
-    void day1_1() {
+    void day7_1() {
         test(Day7.day7_1(), 95_437L);
+    }
+
+    @Test
+    void day7_2() {
+        test(Day7.day7_2(), 24_933_642L);
     }
 }
