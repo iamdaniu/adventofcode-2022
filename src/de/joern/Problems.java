@@ -6,6 +6,7 @@ import de.joern.day3.Day3;
 import de.joern.day4.Day4;
 import de.joern.day5.Day5;
 import de.joern.day6.Day6;
+import de.joern.day7.Day7;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,15 +19,16 @@ public enum Problems {
         DAY3(3, Day3::day3_1, Day3::day3_2),
         DAY4(4, Day4::day4_1, Day4::day4_2),
         DAY5(5, Day5::day5_1, Day5::day5_2),
-        DAY6(6, Day6::day6_1, Day6::day6_2)
+        DAY6(6, Day6::day6_1, Day6::day6_2),
+        DAY7(7, Day7::day7_1)
     ;
 
     public final int day;
 
-    private final List<Supplier<ProblemSolver>> solver;
+    private final List<Supplier<ProblemSolver<?>>> solver;
 
     @SafeVarargs
-    Problems(int day, Supplier<ProblemSolver>... solver) {
+    Problems(int day, Supplier<ProblemSolver<?>>... solver) {
         this.day = day;
         this.solver = Arrays.asList(solver);
     }
@@ -35,7 +37,7 @@ public enum Problems {
         return day;
     }
 
-    public List<ProblemSolver> getSolvers() {
+    public List<ProblemSolver<?>> getSolvers() {
         return solver.stream()
                 .map(Supplier::get)
                 .collect(Collectors.toList());
