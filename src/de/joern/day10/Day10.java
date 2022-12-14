@@ -32,10 +32,6 @@ public class Day10 implements ProblemSolver<Integer> {
         }
     }
 
-    public static ProblemSolver<Integer> day10_1() {
-        return new Day10();
-    }
-
     @Override
     public void consider(String line) {
         var matcher = LINE_PATTERN.matcher(line);
@@ -44,11 +40,7 @@ public class Day10 implements ProblemSolver<Integer> {
         }
         Command command = Command.from(matcher.group(1));
         for (int i = 0; i < command.cycles; i++) {
-            currentCycle++;
-            if (currentCycle >= 20 && ((currentCycle - 20) % 40 == 0)) {
-                int currentSignalStrength = currentCycle * registerValue;
-                signalStrengthSum += currentSignalStrength;
-            }
+            step();
         }
         if (!matcher.group(2).isEmpty()) {
             Integer argument = Integer.parseInt(matcher.group(2));
@@ -57,6 +49,23 @@ public class Day10 implements ProblemSolver<Integer> {
     }
 
     public Integer finished() {
+        System.out.println();
         return signalStrengthSum;
+    }
+
+    private void step() {
+        var crtPosition = currentCycle % 40;
+        if (crtPosition == 0) {
+            System.out.println();
+        }
+        System.out.print(Math.abs(crtPosition - registerValue) < 2
+                ? "#"
+                : ".");
+
+        currentCycle++;
+        if (currentCycle >= 20 && ((currentCycle - 20) % 40 == 0)) {
+            int currentSignalStrength = currentCycle * registerValue;
+            signalStrengthSum += currentSignalStrength;
+        }
     }
 }
