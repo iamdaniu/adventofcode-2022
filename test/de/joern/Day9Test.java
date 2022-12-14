@@ -14,8 +14,8 @@ public class Day9Test extends DayTest {
         test(Day9.day9_1(), 13);
     }
 
-//    @Test
-//    void day8_2() {
-//        test(Day8.day8_2(), 8);
-//    }
+    @Test
+    void day9_2() {
+        test(Day9.day9_2(), 1);
+    }
 }
