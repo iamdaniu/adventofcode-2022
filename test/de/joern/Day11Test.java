@@ -1,6 +1,5 @@
 package de.joern;
 
-import de.joern.day10.Day10;
 import de.joern.day11.Day11;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +10,11 @@ public class Day11Test extends DayTest {
 
 
     @Test
-    void day11() {
-        test(new Day11(), 10605);
+    void day11_1() {
+        test(Day11.day11_1(), 10605L);
+    }
+    @Test
+    void day11_2() {
+        test(Day11.day11_2(), 2713310158L);
     }
 }

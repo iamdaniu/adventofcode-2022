@@ -28,7 +28,7 @@ public enum Problems {
         DAY8(8, Day8::day8_1, Day8::day8_2),
         DAY9(9, Day9::day9_1, Day9::day9_2),
         DAY10(10, Day10::new),
-        DAY11(11, Day11::new)
+        DAY11(11, Day11::day11_1)
     ;
 
     public final int day;
