@@ -13,6 +13,7 @@ public class Day11 implements ProblemSolver<Long> {
     private Monkey.MonkeyBuilder currentMonkeyBuilder;
     private final int rounds;
     private final UnaryOperator<Long> adjustWorryLevel;
+    private long totalDivisor;
 
     private Day11(int rounds, UnaryOperator<Long> adjustWorryLevel) {
         this.rounds = rounds;
@@ -50,6 +51,10 @@ public class Day11 implements ProblemSolver<Long> {
         if (currentMonkeyBuilder != null) {
             monkeys.add(currentMonkeyBuilder.build());
         }
+        totalDivisor = monkeys.stream()
+                .mapToLong(Monkey::getDivisibilityTest)
+                .reduce((l1, l2) -> l1*l2)
+                .orElse(0L);
         for (int i = 0; i < rounds; i++) {
             inspectAllMonkeys();
             System.out.println("round " + i + ": " + monkeys.stream().map(Monkey::getItems).map(Objects::toString).collect(Collectors.joining(", ")));
@@ -88,26 +93,17 @@ public class Day11 implements ProblemSolver<Long> {
     }
 
     private void inspectAllMonkeys() {
-        int i = 0;
         for (Monkey m : monkeys) {
-//            System.out.printf("Monkey %d (%d items):%n", i++, m.getItems().size());
             for (long item : m.getItems()) {
-//                System.out.printf("  monkey inpects an item with worry level %d%n", item);
                 long newItem = m.getOperation().apply(item);
-//                System.out.printf("   new worry level is %d%n", newItem);
                 newItem = adjustWorryLevel.apply(newItem);
-                // newItem /= 3;
-//                System.out.printf("   Monkey gets bored with item. Worry level is adjusted to %d%n", newItem);
                 int throwTo;
                 if (newItem % m.getDivisibilityTest() == 0) {
-//                    System.out.printf("   Current worry level is divisible by %d%n", m.getDivisibilityTest());
                     throwTo = m.getTargetOnTrue();
                 } else {
-//                    System.out.printf("   Current worry level is not divisible by %d%n", m.getDivisibilityTest());
                     throwTo = m.getTargetOnFalse();
                 }
-//                newItem = newItem / monkeys.get(throwTo).getDivisibilityTest();
-                System.out.printf("   Item with worry level %d is thrown to monkey %d%n", newItem, throwTo);
+                newItem = newItem % totalDivisor;
                 monkeys.get(throwTo).getItems().add(newItem);
                 m.setInspections(m.getInspections()+1);
             }
