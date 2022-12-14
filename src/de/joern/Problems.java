@@ -8,6 +8,7 @@ import de.joern.day5.Day5;
 import de.joern.day6.Day6;
 import de.joern.day7.Day7;
 import de.joern.day8.Day8;
+import de.joern.day9.Day9;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +23,8 @@ public enum Problems {
         DAY5(5, Day5::day5_1, Day5::day5_2),
         DAY6(6, Day6::day6_1, Day6::day6_2),
         DAY7(7, Day7::day7_1, Day7::day7_2),
-        DAY8(8, Day8::day8_1, Day8::day8_2)
+        DAY8(8, Day8::day8_1, Day8::day8_2),
+        DAY9(9, Day9::day9_1)
     ;
 
     public final int day;
