@@ -1,29 +1,28 @@
-package de.joern.day14;
+package de.joern;
 
+import de.joern.Coordinate;
 import lombok.Getter;
 
-import static de.joern.day14.Contents.*;
-
-class RockGrid {
-    private final Contents[][] grid = new Contents[1_000][1_000];
+public class Grid<T> {
+    @SuppressWarnings("unchecked")
+    private final T[][] grid = (T[][]) new Object[1_000][1_000];
     private int highestY = Integer.MAX_VALUE;
     private int leftmostX = Integer.MAX_VALUE, rightmostX;
     @Getter
     private int lowestY;
 
-    @Getter
-    private int sandCount;
-
-    RockGrid() {
+    public Grid(T defaultValue) {
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[0].length; j++) {
-                grid[i][j] = EMPTY;
+                grid[i][j] = defaultValue;
             }
         }
     }
 
-    public void addSolid(int x, int y) {
-        grid[x][y] = SOLID;
+    public void setContent(Coordinate coord, T content) {
+        var x = coord.x();
+        var y = coord.y();
+        grid[x][y] = content;
         lowestY = Math.max(lowestY, y);
         highestY = Math.min(highestY, y);
         leftmostX = Math.min(x, leftmostX);
@@ -40,12 +39,7 @@ class RockGrid {
         }
     }
 
-    public Contents contentsAt(int x, int y) {
+    public T contentsAt(int x, int y) {
         return grid[x][y];
-    }
-
-    public void addSand(int x, int y) {
-        grid[x][y] = SAND;
-        sandCount++;
     }
 }

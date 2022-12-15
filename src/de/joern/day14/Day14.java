@@ -1,6 +1,7 @@
 package de.joern.day14;
 
 import de.joern.Coordinate;
+import de.joern.Grid;
 import de.joern.ProblemSolver;
 
 import java.util.regex.Pattern;
@@ -9,7 +10,8 @@ import static de.joern.day14.Contents.*;
 
 public class Day14 implements ProblemSolver<Integer> {
     private static final Pattern COORD_PATTERN = Pattern.compile("([0-9]+),([0-9]+)");
-    private final RockGrid grid = new RockGrid();
+    private final Grid<Contents> grid = new Grid<>(EMPTY);
+    private int sandCount;
 
     public static ProblemSolver<Integer> day14_1() {
         return new Day14();
@@ -41,12 +43,13 @@ public class Day14 implements ProblemSolver<Integer> {
                 sandPosition = new Coordinate(sandPosition.x()+1, yBelow);
             } else {
                 // come to rest
-                grid.addSand(sandPosition.x(), sandPosition.y());
+                grid.setContent(sandPosition, SAND);
                 sandPosition = new Coordinate(500, 0);
+                sandCount++;
             }
         }
         grid.draw();
-        return grid.getSandCount();
+        return sandCount;
     }
 
     static Coordinate parse(String coord) {
@@ -60,11 +63,11 @@ public class Day14 implements ProblemSolver<Integer> {
     void makeSolid(Coordinate start, Coordinate end) {
         if (start.x() == end.x()) {
             for (int y = Math.min(start.y(), end.y()); y < Math.max(start.y(), end.y())+1; y++) {
-                grid.addSolid(start.x(), y);
+                grid.setContent(new Coordinate(start.x(), y), SOLID);
             }
         } else if (start.y() == end.y()) {
             for (int x = Math.min(start.x(), end.x()); x < Math.max(start.x(), end.x())+1; x++) {
-                grid.addSolid(x, start.y());
+                grid.setContent(new Coordinate(x, start.y()), SOLID);
             }
         } else {
             throw new IllegalStateException("either x or y not equal: %s %s".formatted(start, end));
