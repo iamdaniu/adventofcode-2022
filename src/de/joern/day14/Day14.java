@@ -20,9 +20,9 @@ public class Day14 implements ProblemSolver<Integer> {
     @Override
     public void consider(String line) {
         var coords = line.split(" -> ");
-        Coordinate start = parse(coords[0]);
+        Coordinate start = Coordinate.parse(COORD_PATTERN, coords[0]);
         for (int i = 1; i < coords.length; i++) {
-            Coordinate end = parse(coords[i]);
+            Coordinate end = Coordinate.parse(COORD_PATTERN, coords[i]);
             makeSolid(start, end);
             start = end;
         }
@@ -50,14 +50,6 @@ public class Day14 implements ProblemSolver<Integer> {
         }
         grid.draw();
         return sandCount;
-    }
-
-    static Coordinate parse(String coord) {
-        var matcher = COORD_PATTERN.matcher(coord);
-        if (!matcher.matches()) {
-            throw new IllegalArgumentException("could not parse " + coord);
-        }
-        return new Coordinate(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)));
     }
 
     void makeSolid(Coordinate start, Coordinate end) {
