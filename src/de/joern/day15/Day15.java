@@ -7,6 +7,7 @@ import de.joern.ProblemSolver;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class Day15 implements ProblemSolver<Long> {
     static final Pattern SENSOR_PATTERN = Pattern.compile("Sensor at x=([0-9]+), y=([0-9]+):.*");
@@ -42,31 +43,34 @@ public class Day15 implements ProblemSolver<Long> {
 
     @Override
     public Long finished() {
-        grid.draw();
-        return grid.row(checkRow)
+        return row(checkRow)
                 .filter(this::knownNoBeacon)
                 .count();
     }
 
     private boolean knownNoBeacon(Coordinate toCheck) {
-//        System.out.println("checking " + toCheck);
         if (grid.contentsAt(toCheck.x(), toCheck.y()) != Contents.EMPTY) {
-//            System.out.print(grid.contentsAt(toCheck.x(), toCheck.y()));
             return false;
         }
         boolean result = false;
         for (Map.Entry<Coordinate, Integer> sensorEntry : sensorToDistance.entrySet()) {
             final var distance = distance(sensorEntry.getKey(), toCheck);
             if (distance <= sensorEntry.getValue()) {
-//                System.out.printf("found sensor covering: %s (distance %d, has beacon at %s)%n", sensorEntry.getKey(), distance, sensorEntry.getValue());
                 result = true;
                 break;
             }
         }
-//        System.out.println("not covered by sensor");
-//        System.out.print(result ? "#" : ".");
         return result;
-//        return sensorToDistance.entrySet().stream()
-//                .anyMatch(sensorEntry -> distance(toCheck, sensorEntry.getKey()) < sensorEntry.getValue());
+    }
+
+    public Stream<Coordinate> row(int row) {
+        int maxDistance = sensorToDistance.values().stream()
+                .mapToInt(Integer::intValue)
+                .max()
+                .orElse(0);
+        int startX = grid.getLeftmostX() - maxDistance;
+        int endX = grid.getRightmostX() + maxDistance;
+        return Stream.iterate(startX, x -> x <= endX, x -> x+1)
+                .map(x -> new Coordinate(x, row));
     }
 }

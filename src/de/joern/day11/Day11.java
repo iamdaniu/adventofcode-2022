@@ -57,7 +57,6 @@ public class Day11 implements ProblemSolver<Long> {
                 .orElse(0L);
         for (int i = 0; i < rounds; i++) {
             inspectAllMonkeys();
-            System.out.println("round " + i + ": " + monkeys.stream().map(Monkey::getItems).map(Objects::toString).collect(Collectors.joining(", ")));
         }
         System.out.println(monkeys.stream().map(Monkey::getInspections).map(Objects::toString).collect(Collectors.joining(", ")));
         monkeys.sort(Comparator.comparing(Monkey::getInspections).reversed());

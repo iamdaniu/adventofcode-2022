@@ -3,7 +3,6 @@ package de.joern;
 import lombok.Getter;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -12,6 +11,7 @@ public class Grid<T> {
     private final T defaultValue;
 
     private int highestY = Integer.MAX_VALUE;
+    @Getter
     private int leftmostX = Integer.MAX_VALUE, rightmostX;
     @Getter
     private int lowestY;
@@ -44,10 +44,4 @@ public class Grid<T> {
         return contentMap.getOrDefault(new Coordinate(x, y), defaultValue);
     }
 
-    public Stream<Coordinate> row(int row) {
-        int startX = leftmostX;
-        int endX = rightmostX;
-        return Stream.iterate(startX, x -> x <= endX, x -> x+1)
-                .map(x -> new Coordinate(x, row));
-    }
 }
