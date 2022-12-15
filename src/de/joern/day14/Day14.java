@@ -30,7 +30,6 @@ public class Day14 implements ProblemSolver<Integer> {
 
     @Override
     public Integer finished() {
-        grid.draw();
         Coordinate sandPosition = new Coordinate(500, 0);
         while (sandPosition.y() < grid.getLowestY()) {
             // fall
@@ -48,7 +47,6 @@ public class Day14 implements ProblemSolver<Integer> {
                 sandCount++;
             }
         }
-        grid.draw();
         return sandCount;
     }
 
