@@ -3,7 +3,9 @@ package de.joern;
 import lombok.Getter;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class Grid<T> {
     private final Map<Coordinate, T> contentMap = new HashMap<>();
@@ -40,5 +42,12 @@ public class Grid<T> {
 
     public T contentsAt(int x, int y) {
         return contentMap.getOrDefault(new Coordinate(x, y), defaultValue);
+    }
+
+    public Stream<Coordinate> row(int row) {
+        int startX = leftmostX;
+        int endX = rightmostX;
+        return Stream.iterate(startX, x -> x <= endX, x -> x+1)
+                .map(x -> new Coordinate(x, row));
     }
 }
