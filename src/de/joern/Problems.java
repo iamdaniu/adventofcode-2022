@@ -32,7 +32,7 @@ public enum Problems {
         DAY10(10, Day10::new),
         DAY11(11, Day11::day11_1, Day11::day11_2),
         DAY14(14, Day14::day14_1),
-        DAY15(15, () -> Day15.day15_1(2_000_000))
+        DAY15(15, () -> Day15.day15_1(2_000_000), () -> Day15.day15_2(0, 4_000_000))
     ;
 
     public final int day;

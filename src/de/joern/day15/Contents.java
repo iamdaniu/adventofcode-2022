@@ -3,7 +3,8 @@ package de.joern.day15;
 enum Contents {
     EMPTY("."),
     SENSOR("S"),
-    BEACON("B");
+    BEACON("B"),
+    COVERED("C");
 
     private final String display;
 

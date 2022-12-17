@@ -64,18 +64,18 @@ public class Day9 implements ProblemSolver<Integer> {
     }
 
     static Coordinate moveTowards(Coordinate head, Coordinate tail) {
-        int xDistance = Math.abs(head.x() - tail.x());
-        int yDistance = Math.abs(head.y() - tail.y());
+        var xDistance = Math.abs(head.x() - tail.x());
+        var yDistance = Math.abs(head.y() - tail.y());
         // stay where it is
         if (xDistance < 2 && yDistance < 2) {
             return tail;
         }
-        int newX = adjust(tail.x(), head.x());
-        int newY = adjust(tail.y(), head.y());
+        var newX = adjust(tail.x(), head.x());
+        var newY = adjust(tail.y(), head.y());
         return new Coordinate(newX, newY);
     }
 
-    private static int adjust(int from, int to) {
+    private static long adjust(long from, long to) {
         if (from == to) {
             return from;
         }
