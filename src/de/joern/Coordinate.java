@@ -2,9 +2,9 @@ package de.joern;
 
 import java.util.regex.Pattern;
 
-public record Coordinate(int x, int y) {
+public record Coordinate(long x, long y) {
     public Coordinate(String x, String y) {
-        this (Integer.parseInt(x), Integer.parseInt(y));
+        this (Long.parseLong(x), Long.parseLong(y));
     }
     public static Coordinate parse(Pattern pattern, String toParse) {
         var matcher = pattern.matcher(toParse);

@@ -52,11 +52,11 @@ public class Day14 implements ProblemSolver<Integer> {
 
     void makeSolid(Coordinate start, Coordinate end) {
         if (start.x() == end.x()) {
-            for (int y = Math.min(start.y(), end.y()); y < Math.max(start.y(), end.y())+1; y++) {
+            for (long y = Math.min(start.y(), end.y()); y < Math.max(start.y(), end.y())+1; y++) {
                 grid.setContent(new Coordinate(start.x(), y), SOLID);
             }
         } else if (start.y() == end.y()) {
-            for (int x = Math.min(start.x(), end.x()); x < Math.max(start.x(), end.x())+1; x++) {
+            for (long x = Math.min(start.x(), end.x()); x < Math.max(start.x(), end.x())+1; x++) {
                 grid.setContent(new Coordinate(x, start.y()), SOLID);
             }
         } else {

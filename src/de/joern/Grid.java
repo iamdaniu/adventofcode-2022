@@ -4,17 +4,16 @@ import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
 
 public class Grid<T> {
     private final Map<Coordinate, T> contentMap = new HashMap<>();
     private final T defaultValue;
 
-    private int highestY = Integer.MAX_VALUE;
+    private long highestY = Long.MAX_VALUE;
     @Getter
-    private int leftmostX = Integer.MAX_VALUE, rightmostX;
+    private long leftmostX = Long.MAX_VALUE, rightmostX;
     @Getter
-    private int lowestY;
+    private long lowestY;
 
     public Grid(T defaultValue) {
         this.defaultValue = defaultValue;
@@ -32,16 +31,20 @@ public class Grid<T> {
 
     public void draw() {
         System.out.printf("top left: (%d/%d), bottom right: (%d/%d)%n", leftmostX, highestY, rightmostX, lowestY);
-        for (int y = highestY; y < lowestY + 1; y++) {
-            for (int x = leftmostX; x < rightmostX + 1; x++) {
+        for (long y = highestY; y < lowestY + 1; y++) {
+            System.out.printf("%4d:", y);
+            for (long x = leftmostX; x < rightmostX + 1; x++) {
                 System.out.print(contentsAt(x, y));
             }
             System.out.println();
         }
     }
 
-    public T contentsAt(int x, int y) {
-        return contentMap.getOrDefault(new Coordinate(x, y), defaultValue);
+    public T contentsAt(long x, long y) {
+        return contentsAt(new Coordinate(x, y));
     }
 
+    public T contentsAt(Coordinate at) {
+        return contentMap.getOrDefault(at, defaultValue);
+    }
 }
